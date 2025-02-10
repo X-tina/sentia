@@ -11,7 +11,7 @@ type RowItem = {
 };
 
 type CSVTableResponse = {
-  total: number;
+  total_count: number;
   data: RowItem[];
 };
 
@@ -32,12 +32,12 @@ const CSV_LIST_PATH = '/people';
 const CSV_UPLOAD_PATH = '/people/import';
 
 const CsvImporter = () => {
-  const [apiData, setData] = useState<CSVTableResponse>({ data: [], total: 0 });
+  const [apiData, setData] = useState<CSVTableResponse>({ data: [], total_count: 0 });
   const [search, setSearch] = useState('');
   const [sortKey, setSortKey] = useState<keyof RowItem | null>(null);
-  const [sortOrder, setSortOrder] = useState<SortOrder>('ascend');
+  const [sortOrder, setSortOrder] = useState<SortOrder>('asc');
   const [page, setPage] = useState(1);
-  const totalPages = Math.ceil(apiData.total / perPage) || 1;
+  const totalPages = Math.ceil(apiData.total_count / perPage) || 1;
 
   const fetchData = useCallback(async () => {
     try {
@@ -123,7 +123,7 @@ const CsvImporter = () => {
                 onClick={() => handleSort(col)}
               >
                 {col.replace('_', ' ').toUpperCase()}{' '}
-                {sortKey === col ? (sortOrder === 'ascend' ? '▲' : '▼') : ''}
+                {sortKey === col ? (sortOrder === 'asc' ? '▲' : '▼') : ''}
               </th>
             ))}
           </tr>

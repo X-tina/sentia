@@ -6,12 +6,15 @@
 <p> docker <p>
 
 # Setup and run
-docker compose app --build
+<p>Run Docker Desctop<p>
+<p>Inside root diretory:<p>
+``` docker-compose build ```
+``` docker-compose up```
 
 # Access to interactive shell
-```docker compose exec -it sentia_api /bin/bash ```
+```docker-compose exec -it sentia_api /bin/bash ```
 
-```docker compose run sentia_api rails db:create db:migrate```
+```docker-compose run sentia_api rails db:create db:migrate```
 
 # Navigate
 ```frontend: http://localhost:5173 ```
