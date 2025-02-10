@@ -1,3 +1,16 @@
+x-base: &base-backend
+  environment:
+    DEBUG: 'on'
+    DATABASE_HOST: 'db'
+    DATABASE_PORT: 5432
+    DATABASE_USER: 'postgres'
+    DATABASE_PASSWORD: 'password'
+
+  volumes:
+    - .:/app:delegated
+    - cache:/cache:delegated
+  depends_on:
+    - db
 
 services:
   db:
@@ -35,7 +48,8 @@ services:
       - ./sentia_frontend:/app
       - /app/node_modules
     ports:
-      - "3001:3000"
+      - "5173:5173"
+
     environment:
       - CHOKIDAR_USEPOLLING=true
 

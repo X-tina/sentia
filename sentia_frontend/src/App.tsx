@@ -5,7 +5,7 @@ type RowItem = {
   location: string;
   species: string;
   gender: string;
-  affiliations: string | null;
+  affiliation: string | null;
   weapon: string | null;
   vehicle: string | null;
 };
@@ -15,21 +15,21 @@ type CSVTableResponse = {
   data: RowItem[];
 };
 
-type SortOrder = 'descend' | 'ascend';
+type SortOrder = 'desc' | 'asc';
 
 const columns: (keyof RowItem)[] = [
   'name',
   'location',
   'species',
   'gender',
-  'affiliations',
+  'affiliation',
   'weapon',
   'vehicle',
 ];
-const pageSize = 10;
-const API_BASE_URL = 'https://jsonplaceholder.typicode.com';
-const CSV_LIST_PATH = '/api/csv-list';
-const CSV_UPLOAD_PATH = '/api/csv-upload';
+const perPage = 10;
+const API_BASE_URL = 'http://localhost:3000';
+const CSV_LIST_PATH = '/people';
+const CSV_UPLOAD_PATH = '/people/import';
 
 const CsvImporter = () => {
   const [apiData, setData] = useState<CSVTableResponse>({ data: [], total: 0 });
@@ -37,13 +37,13 @@ const CsvImporter = () => {
   const [sortKey, setSortKey] = useState<keyof RowItem | null>(null);
   const [sortOrder, setSortOrder] = useState<SortOrder>('ascend');
   const [page, setPage] = useState(1);
-  const totalPages = Math.ceil(apiData.total / pageSize) || 1;
+  const totalPages = Math.ceil(apiData.total / perPage) || 1;
 
   const fetchData = useCallback(async () => {
     try {
       const queryParams = new URLSearchParams();
       queryParams.append('page', `${page}`);
-      queryParams.append('pageSize', `${pageSize}`);
+      queryParams.append('perPage', `${perPage}`);
       if (search) queryParams.append('search', search);
       if (sortKey) {
         queryParams.append('sortKey', sortKey);
@@ -51,6 +51,7 @@ const CsvImporter = () => {
       }
 
       const response = await fetch(`${API_BASE_URL}${CSV_LIST_PATH}?${queryParams.toString()}`);
+
       if (!response.ok) throw new Error('Failed to fetch data');
       const result = await response.json();
       setData(result);
@@ -91,7 +92,7 @@ const CsvImporter = () => {
   };
 
   const handleSort = (key: keyof RowItem | null) => {
-    const order = sortKey === key && sortOrder === 'ascend' ? 'descend' : 'ascend';
+    const order = sortKey === key && sortOrder === 'asc' ? 'desc' : 'asc';
     setSortKey(key);
     setSortOrder(order);
     setPage(1);
